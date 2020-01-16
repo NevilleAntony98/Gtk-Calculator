@@ -18,53 +18,78 @@ class OperationButtons(Gtk.Button):
 
 class MainActivity(Gtk.Window):
     def __init__(self):
+        self.result = ""
+
         Gtk.Window.__init__(self, title="Calculator")
 
-        grid = Gtk.Grid()
-        self.add(grid)
+        self.grid = Gtk.Grid()
+        self.add(self.grid)
 
-        result_label = Gtk.Label(label="ANSWER")
+        self.result_label = Gtk.Label(label="0")
 
-        button0 = NumberButtons(label="0")
-        button1 = NumberButtons(label="1")
-        button2 = NumberButtons(label="2")
-        button3 = NumberButtons(label="3")
-        button4 = NumberButtons(label="4")
-        button5 = NumberButtons(label="5")
-        button6 = NumberButtons(label="6")
-        button7 = NumberButtons(label="7")
-        button8 = NumberButtons(label="8")
-        button9 = NumberButtons(label="9")
+        self.button0 = NumberButtons(label="0")
+        self.button0.connect("clicked", self.on_num_button_clicked)
+
+        self.button1 = NumberButtons(label="1")
+        self.button1.connect("clicked", self.on_num_button_clicked)
+
+        self.button2 = NumberButtons(label="2")
+        self.button2.connect("clicked", self.on_num_button_clicked)
+
+        self.button3 = NumberButtons(label="3")
+        self.button3.connect("clicked", self.on_num_button_clicked)
+
+        self.button4 = NumberButtons(label="4")
+        self.button4.connect("clicked", self.on_num_button_clicked)
+
+        self.button5 = NumberButtons(label="5")
+        self.button5.connect("clicked", self.on_num_button_clicked)
+
+        self.button6 = NumberButtons(label="6")
+        self.button6.connect("clicked", self.on_num_button_clicked)
+
+        self.button7 = NumberButtons(label="7")
+        self.button7.connect("clicked", self.on_num_button_clicked)
+
+        self.button8 = NumberButtons(label="8")
+        self.button8.connect("clicked", self.on_num_button_clicked)
+
+        self.button9 = NumberButtons(label="9")
+        self.button9.connect("clicked", self.on_num_button_clicked)
         
-        button_decimal = NumberButtons(label=".")
-        button_calc = NumberButtons(label="=")
+        self.button_decimal = NumberButtons(label=".")
+        self.button_calc = NumberButtons(label="=")
 
-        button_delete = NumberButtons(label="DEL")
-        button_div = NumberButtons(label="/")
-        button_mul = NumberButtons(label="*")
-        button_sub = NumberButtons(label="-")
-        button_add = NumberButtons(label="+")
+        self.button_delete = NumberButtons(label="DEL")
+        self.button_div = NumberButtons(label="/")
+        self.button_mul = NumberButtons(label="*")
+        self.button_sub = NumberButtons(label="-")
+        self.button_add = NumberButtons(label="+")
 
-        grid.attach(result_label, 0, 0, 4, 1)
-        grid.attach(button7, 0, 1, 1, 1)
-        grid.attach_next_to(button8, button7, Gtk.PositionType.RIGHT, 1, 1)
-        grid.attach_next_to(button9, button8, Gtk.PositionType.RIGHT, 1, 1)
-        grid.attach_next_to(button4, button7, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button5, button8, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button6, button9, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button1, button4, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button2, button5, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button3, button6, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach(self.result_label, 0, 0, 4, 1)
+        self.grid.attach(self.button7, 0, 1, 1, 1)
+        self.grid.attach_next_to(self.button8, self.button7, Gtk.PositionType.RIGHT, 1, 1)
+        self.grid.attach_next_to(self.button9, self.button8, Gtk.PositionType.RIGHT, 1, 1)
+        self.grid.attach_next_to(self.button4, self.button7, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button5, self.button8, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button6, self.button9, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button1, self.button4, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button2, self.button5, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button3, self.button6, Gtk.PositionType.BOTTOM, 1, 1)
 
-        grid.attach_next_to(button_decimal, button1, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button0, button2, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button_calc, button3, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button_decimal, self.button1, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button0, self.button2, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button_calc, self.button3, Gtk.PositionType.BOTTOM, 1, 1)
 
-        grid.attach_next_to(button_delete, result_label, Gtk.PositionType.RIGHT, 1, 1)
-        grid.attach_next_to(button_div, button_delete, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button_mul, button_div, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button_sub, button_mul, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(button_add, button_sub, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button_delete, self.result_label, Gtk.PositionType.RIGHT, 1, 1)
+        self.grid.attach_next_to(self.button_div, self.button_delete, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button_mul, self.button_div, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button_sub, self.button_mul, Gtk.PositionType.BOTTOM, 1, 1)
+        self.grid.attach_next_to(self.button_add, self.button_sub, Gtk.PositionType.BOTTOM, 1, 1)
+    
+    def on_num_button_clicked(self, button):
+        self.result += button.get_label()
+        self.result_label.set_label(self.result)
 
 
 win = MainActivity()
