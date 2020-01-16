@@ -18,14 +18,15 @@ class OperationButtons(Gtk.Button):
 
 class MainActivity(Gtk.Window):
     def __init__(self):
-        self.result = ""
+
+        self.expr = ""
 
         Gtk.Window.__init__(self, title="Calculator")
 
         self.grid = Gtk.Grid()
         self.add(self.grid)
 
-        self.result_label = Gtk.Label(label="0")
+        self.result_label = Gtk.Label(label="ANS")
 
         self.button0 = NumberButtons(label="0")
         self.button0.connect("clicked", self.on_num_button_clicked)
@@ -58,13 +59,25 @@ class MainActivity(Gtk.Window):
         self.button9.connect("clicked", self.on_num_button_clicked)
         
         self.button_decimal = NumberButtons(label=".")
+        self.button_decimal.connect("clicked", self.on_dec_button_clicked)
+
         self.button_calc = NumberButtons(label="=")
+        self.button_calc.connect("clicked", self.on_eval_clicked)
 
         self.button_delete = NumberButtons(label="DEL")
+        self.button_delete.connect("clicked", self.on_del_button_clicked)
+
         self.button_div = NumberButtons(label="/")
+        self.button_div.connect("clicked", self.on_op_button_clicked)
+
         self.button_mul = NumberButtons(label="*")
+        self.button_mul.connect("clicked", self.on_op_button_clicked)
+
         self.button_sub = NumberButtons(label="-")
+        self.button_sub.connect("clicked", self.on_op_button_clicked)
+
         self.button_add = NumberButtons(label="+")
+        self.button_add.connect("clicked", self.on_op_button_clicked)
 
         self.grid.attach(self.result_label, 0, 0, 4, 1)
         self.grid.attach(self.button7, 0, 1, 1, 1)
@@ -88,9 +101,35 @@ class MainActivity(Gtk.Window):
         self.grid.attach_next_to(self.button_add, self.button_sub, Gtk.PositionType.BOTTOM, 1, 1)
     
     def on_num_button_clicked(self, button):
-        self.result += button.get_label()
-        self.result_label.set_label(self.result)
+        self.expr += button.get_label()
+        self.result_label.set_label(self.expr)
 
+    def on_op_button_clicked(self, button):
+        oplist = ["+", "-", "*", "/"]
+        op = button.get_label()
+        if self.result_label.get_label() != "ANS" and self.expr[-1] not in oplist:
+            self.expr += op
+        self.result_label.set_label(self.expr)
+    
+    def on_dec_button_clicked(self, button):
+        if self.result_label.get_label() != "ANS":
+            self.expr += button.get_label()
+            self.result_label.set_label(self.expr)
+        
+    def on_eval_clicked(self, button): 
+        try:
+            self.expr = str(round(eval(self.expr), 6))
+        except SyntaxError:
+            pass
+        self.result_label.set_label(str(self.expr))
+
+    def on_del_button_clicked(self, button):
+        if self.result_label.get_label() != "ANS" and self.expr != "":
+            self.expr = self.expr[:-1]
+            if self.expr == "":
+                self.result_label.set_label("ANS")
+            else:
+                self.result_label.set_label(self.expr)
 
 win = MainActivity()
 win.connect('destroy', Gtk.main_quit)
