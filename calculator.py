@@ -108,8 +108,11 @@ class MainActivity(Gtk.Window):
     def on_op_button_clicked(self, button):
         oplist = ["+", "-", "*", "/"]
         op = button.get_label()
-        if self.result_label.get_label() != "ANS" and self.expr[-1] not in oplist:
-            self.expr += op
+        if self.result_label.get_label() != "ANS":
+            if self.expr[-1] is not op and self.expr[-1] in oplist:
+                self.expr = self.expr[:-1] + op
+            elif self.expr[-1] not in op:
+                self.expr += op
         self.result_label.set_label(self.expr)
     
     def on_dec_button_clicked(self, button):
@@ -134,7 +137,6 @@ class MainActivity(Gtk.Window):
 
     def validate_expr(self, expression):
         regexp = r" *\d*\.?\d* *([\/\*\-\+] *\d*\.?\d* *)*"
-        #also check this for complete input validation   *\d*\.?\d* *([\/\*\-\+]?[\-]?\d+\.?\d* *)* *[\/\*\-\+]?
         return bool(re.fullmatch(regexp, expression))
 
 win = MainActivity()
