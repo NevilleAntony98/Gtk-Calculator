@@ -1,15 +1,14 @@
-import gi
-import re
+import gi, re
 
 gi.require_version('Gtk', '3.0')
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 class NumberButtons(Gtk.Button):
         def __init__(self, label):
                 Gtk.Button.__init__(self)
                 self.set_label(label)
-                self.set_size_request(75, 50)
+                self.set_size_request(80, 70)
 
 class OperationButtons(Gtk.Button):
         def __init__(self, label):
@@ -20,14 +19,59 @@ class OperationButtons(Gtk.Button):
 class MainActivity(Gtk.Window):
     def __init__(self):
 
+        self.screen = Gdk.Screen.get_default()
+        self.provider = Gtk.CssProvider()
+        self.style_context = Gtk.StyleContext()
+        self.style_context.add_provider_for_screen(
+            self.screen, self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+        self.css = b"""
+        window {
+            background: white;
+        }
+        .result_label {
+            background: white;
+            color: black;
+        }
+        .delete_button {
+            background: #EF5350;
+            color: white;
+        }
+        button {
+            background: #E0E0E0;
+            color: black;
+            border-radius: 4px;
+            border-width: 1px;
+            border-color: white;
+        }
+        button:hover {
+            background: #BDBDBD;
+        }
+        button:active {
+            background: #212121;
+            color: white;
+        }
+        .button_op {
+            background: #00E676;
+        }
+        """
+        self.provider.load_from_data(self.css)
+
         self.expr = ""
 
         Gtk.Window.__init__(self, title="Calculator")
+        window_context = self.get_style_context()
+        window_context.add_class("window")
+
+        self.set_resizable(False)
 
         self.grid = Gtk.Grid()
         self.add(self.grid)
 
         self.result_label = Gtk.Label(label="ANS")
+
+        label_context = self.result_label.get_style_context()
+        label_context.add_class("result_label")
 
         self.button0 = NumberButtons(label="0")
         self.button0.connect("clicked", self.on_num_button_clicked)
@@ -67,18 +111,29 @@ class MainActivity(Gtk.Window):
 
         self.button_delete = NumberButtons(label="DEL")
         self.button_delete.connect("clicked", self.on_del_button_clicked)
+        delete_context = self.button_delete.get_style_context()
+        delete_context.add_class("delete_button")
+
 
         self.button_div = NumberButtons(label="/")
         self.button_div.connect("clicked", self.on_op_button_clicked)
+        button_op_context = self.button_div.get_style_context()
+        button_op_context.add_class("button_op")
 
         self.button_mul = NumberButtons(label="*")
         self.button_mul.connect("clicked", self.on_op_button_clicked)
+        button_op_context = self.button_mul.get_style_context()
+        button_op_context.add_class("button_op")
 
         self.button_sub = NumberButtons(label="-")
         self.button_sub.connect("clicked", self.on_op_button_clicked)
+        button_op_context = self.button_sub.get_style_context()
+        button_op_context.add_class("button_op")
 
         self.button_add = NumberButtons(label="+")
         self.button_add.connect("clicked", self.on_op_button_clicked)
+        button_op_context = self.button_add.get_style_context()
+        button_op_context.add_class("button_op")
 
         self.grid.attach(self.result_label, 0, 0, 4, 1)
         self.grid.attach(self.button7, 0, 1, 1, 1)
