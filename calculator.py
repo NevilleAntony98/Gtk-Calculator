@@ -1,4 +1,5 @@
 import gi
+import re
 
 gi.require_version('Gtk', '3.0')
 
@@ -112,7 +113,7 @@ class MainActivity(Gtk.Window):
         self.result_label.set_label(self.expr)
     
     def on_dec_button_clicked(self, button):
-        if self.result_label.get_label() != "ANS":
+        if self.result_label.get_label() != "ANS" and self.validate_expr(self.expr + "."):
             self.expr += button.get_label()
             self.result_label.set_label(self.expr)
         
@@ -130,6 +131,11 @@ class MainActivity(Gtk.Window):
                 self.result_label.set_label("ANS")
             else:
                 self.result_label.set_label(self.expr)
+
+    def validate_expr(self, expression):
+        regexp = r" *\d*\.?\d* *([\/\*\-\+] *\d*\.?\d* *)*"
+        #also check this for complete input validation   *\d*\.?\d* *([\/\*\-\+]?[\-]?\d+\.?\d* *)* *[\/\*\-\+]?
+        return bool(re.fullmatch(regexp, expression))
 
 win = MainActivity()
 win.connect('destroy', Gtk.main_quit)
