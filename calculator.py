@@ -28,10 +28,15 @@ class MainActivity(Gtk.Window):
         self.css = b"""
         window {
             background: white;
+            font-size: 1.2rem;
+            font-family: Roboto;
         }
         .result_label {
-            background: white;
+            background: #F0F0F0;
             color: black;
+            border-radius: 6px;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
         .delete_button {
             background: #EF5350;
@@ -40,7 +45,7 @@ class MainActivity(Gtk.Window):
         button {
             background: #E0E0E0;
             color: black;
-            border-radius: 4px;
+            border-radius: 6px;
             border-width: 1px;
             border-color: white;
         }
@@ -163,12 +168,15 @@ class MainActivity(Gtk.Window):
     def on_op_button_clicked(self, button):
         oplist = ["+", "-", "*", "/"]
         op = button.get_label()
-        if self.result_label.get_label() != "ANS":
-            if self.expr[-1] is not op and self.expr[-1] in oplist:
-                self.expr = self.expr[:-1] + op
-            elif self.expr[-1] not in op:
-                self.expr += op
-        self.result_label.set_label(self.expr)
+        try: 
+            if self.result_label.get_label() != "ANS":
+                if self.expr[-1] is not op and self.expr[-1] in oplist:
+                    self.expr = self.expr[:-1] + op
+                elif self.expr[-1] not in op:
+                    self.expr += op
+                self.result_label.set_label(self.expr)
+        except IndexError:
+            pass
     
     def on_dec_button_clicked(self, button):
         if self.result_label.get_label() != "ANS" and self.validate_expr(self.expr + "."):
