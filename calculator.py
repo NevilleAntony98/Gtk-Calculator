@@ -58,6 +58,7 @@ class MainActivity(Gtk.Window):
         }
         .button_op {
             background: #00E676;
+            font-size: 1.3rem;
         }
         """
         self.provider.load_from_data(self.css)
@@ -69,6 +70,11 @@ class MainActivity(Gtk.Window):
         window_context.add_class("window")
 
         self.set_resizable(False)
+
+        self.hb = Gtk.HeaderBar()
+        self.hb.set_show_close_button(True)
+        self.hb.props.title = "Calculator"
+        self.set_titlebar(self.hb)
 
         self.grid = Gtk.Grid()
         self.add(self.grid)
@@ -120,17 +126,17 @@ class MainActivity(Gtk.Window):
         delete_context.add_class("delete_button")
 
 
-        self.button_div = NumberButtons(label="/")
+        self.button_div = NumberButtons(label="\u00F7")
         self.button_div.connect("clicked", self.on_op_button_clicked)
         button_op_context = self.button_div.get_style_context()
         button_op_context.add_class("button_op")
 
-        self.button_mul = NumberButtons(label="*")
+        self.button_mul = NumberButtons(label="\u00D7")
         self.button_mul.connect("clicked", self.on_op_button_clicked)
         button_op_context = self.button_mul.get_style_context()
         button_op_context.add_class("button_op")
 
-        self.button_sub = NumberButtons(label="-")
+        self.button_sub = NumberButtons(label="\u2212")
         self.button_sub.connect("clicked", self.on_op_button_clicked)
         button_op_context = self.button_sub.get_style_context()
         button_op_context.add_class("button_op")
